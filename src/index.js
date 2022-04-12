@@ -96,7 +96,7 @@ app.post("/post", jsonParser, (request, response) => {
         });
 
         const query = { id: request.body.authorId };
-        const update = { $push: { myPosts: request.body.id } };
+        const update = { $push: { myPostsIds: request.body.id } };
 
         mongo.db(mongodbName).collection(mongodbUsersCollectionName).updateOne(query, update, (error) => {
             if(error) {
@@ -137,7 +137,7 @@ app.put("/like-post", jsonParser, (request, response) => {
         }
 
         const query = { id: request.body.userId };
-        const update = { $push: { likedPosts: request.body.postId } };
+        const update = { $push: { likedPostsIds: request.body.postId } };
 
         mongo.db(mongodbName).collection(mongodbUsersCollectionName).updateOne(query, update, (error) => {
             if(error) {
@@ -157,7 +157,7 @@ app.put("/dislike-post", jsonParser, (request, response) => {
         }
 
         const query = { id: request.body.userId };
-        const update = { $pull: { likedPosts: request.body.postId } };
+        const update = { $pull: { likedPostsIds: request.body.postId } };
 
         mongo.db(mongodbName).collection(mongodbUsersCollectionName).updateOne(query, update, (error) => {
             if(error) {
