@@ -66,6 +66,27 @@ app.get("/user/::email/::password", (request, response) => {
   });
 });
 
+app.get("/user/::id", (request, response) => {
+  mongoClient.connect(mongodbURL, (error, mongo) => {
+    if (error) {
+      return response.status(httpStatusCodes.INTERNAL_SERVER_ERROR).send(error);
+    }
+
+    const findQuery = {
+      id: request.params.id
+    };
+
+    mongo.db(mongodbName).collection(mongodbUsersCollectionName).findOne(findQuery, { projection: { "_id": false } }, (error, user) => {
+      if (error) {
+        return response.status(httpStatusCodes.INTERNAL_SERVER_ERROR).send(error);
+      }
+
+      mongo.close();
+      response.send(user);
+    });
+  });
+});
+
 app.post("/user", jsonParser, (request, response) => {
   mongoClient.connect(mongodbURL, (error, mongo) => {
     if (error) {
